@@ -37,7 +37,7 @@ function Titulo(props) {
             <Tag>{props.children}</Tag>
             <style jsx>{`
                 ${Tag} {
-                    color: ${appConfig.theme.colors.neutrals['500']};
+                    color: ${appConfig.theme.colors.neutrals["000"]};
                     font-size: 24px;
                     font-weight: 600;
                 }
@@ -59,7 +59,7 @@ function Titulo(props) {
 // export default HomePage
 
 export default function PaginaInicial() {
-    const username = 'peas';
+    const username = 'Levi-Magny';
 
     return (
         <>
@@ -67,8 +67,8 @@ export default function PaginaInicial() {
             <Box
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    backgroundColor: appConfig.theme.colors.primary[500],
-                    backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
+                    backgroundColor: appConfig.theme.colors.neutrals[100],
+                    backgroundImage: 'url(https://www.nawpic.com/media/2020/spider-man-into-the-spider-verse-nawpic-11-scaled.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
@@ -95,8 +95,8 @@ export default function PaginaInicial() {
                             width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
                         }}
                     >
-                        <Titulo tag="h2">Boas vindas de volta!</Titulo>
-                        <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
+                        <Titulo tag="h2">Sabe o que é mais legal que magia? Matemática!</Titulo>
+                        <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[100] }}>
                             {appConfig.name}
                         </Text>
 
@@ -152,7 +152,7 @@ export default function PaginaInicial() {
                         <Text
                             variant="body4"
                             styleSheet={{
-                                color: appConfig.theme.colors.neutrals[200],
+                                color: appConfig.theme.colors.neutrals[100],
                                 backgroundColor: appConfig.theme.colors.neutrals[900],
                                 padding: '3px 10px',
                                 borderRadius: '1000px'
