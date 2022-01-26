@@ -1,34 +1,7 @@
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-
-function GlobalStyle() {
-    return (
-        <style global jsx>{`
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            list-style: none;
-        }
-        body {
-            font-family: 'Open Sans', sans-serif;
-        }
-        /* App fit Height */
-        html, body, #__next {
-            min-height: 100vh;
-            display: flex;
-            flex: 1;
-        }
-        #__next {
-            flex: 1;
-        }
-        #__next > * {
-            flex: 1;
-        }
-        /* ./App fit Height */
-        `}</style>
-    );
-}
+import { React, useState } from 'react';
+import { useRouter } from 'next/router';
 
 function Titulo(props) {
     const Tag = props.tag || 'h1';
@@ -46,24 +19,13 @@ function Titulo(props) {
     );
 }
 
-// //Componente react
-// function HomePage() {
-//     return (
-//         <div>
-//             <Titulo tag={'h1'}>Boas vindas de volta!</Titulo>
-//             <h2>Discord - Alura Matrix</h2>
-//         </div>
-//     )
-// }
-
-// export default HomePage
-
 export default function PaginaInicial() {
-    const username = 'Levi-Magny';
+    const [username, setUsername] = useState('');
+    const [errorImg, setErrorImg] = useState(true);
+    const rotas = useRouter();
 
     return (
         <>
-            <GlobalStyle />
             <Box
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -94,7 +56,11 @@ export default function PaginaInicial() {
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                             width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
                         }}
-                    >
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            rotas.push('/chat');
+                        }}
+                    >   
                         <Titulo tag="h2">Sabe o que é mais legal que magia? Matemática!</Titulo>
                         <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[100] }}>
                             {appConfig.name}
@@ -110,6 +76,13 @@ export default function PaginaInicial() {
                                     backgroundColor: appConfig.theme.colors.neutrals[800],
                                 },
                             }}
+                            value={username}
+                            onChange={(event) => {
+                                setUsername(event.target.value);
+                                if(errorImg){
+                                    setErrorImg(false);
+                                }
+                            }}
                         />
                         <Button
                             type='submit'
@@ -121,6 +94,7 @@ export default function PaginaInicial() {
                                 mainColorLight: appConfig.theme.colors.primary[400],
                                 mainColorStrong: appConfig.theme.colors.primary[600],
                             }}
+                            disabled={errorImg}
                         />
                     </Box>
                     {/* Formulário */}
@@ -147,17 +121,21 @@ export default function PaginaInicial() {
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-                            src={`https://github.com/${username}.png`}
+                            src={errorImg ? `https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg` : `https://github.com/${username}.png`}
+                            onError={() => {
+                                if(!errorImg)
+                                    setErrorImg(true)
+                            }}
                         />
                         <Text
-                            variant="body4"
+                            variant="body4" 
                             styleSheet={{
                                 color: appConfig.theme.colors.neutrals[100],
                                 backgroundColor: appConfig.theme.colors.neutrals[900],
                                 padding: '3px 10px',
                                 borderRadius: '1000px'
                             }}
-                        >
+                        >   
                             {username}
                         </Text>
                     </Box>
