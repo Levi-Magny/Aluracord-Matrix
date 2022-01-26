@@ -1,6 +1,6 @@
 import { Box, Image, Text } from "@skynexui/components";
 import appConfig from '../config.json';
-import Titulo from "../components";
+import {Titulo} from "../components";
 // import spiderHam from '../assets/Spiedr_ham.png';
 
 export default function PageNotFound() {
