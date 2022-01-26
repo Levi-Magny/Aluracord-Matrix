@@ -37,6 +37,8 @@ export default function MyApp ({ Component, pageProps }) {
                 <title>Aranhacord</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta property="og:title" content="Aranhacord" key="title" />
+                <meta property="og:description" content="Entre em um chat para conversar sobre os infinitos universos do Teioso." />
+                <meta property="og:url" content="https://aluracord-levi.vercel.app/" />
                 <link rel="shortcut icon" href="/favicon.png"/>
             </Head>
             <Component {...pageProps}/>
