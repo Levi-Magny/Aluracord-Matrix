@@ -2,22 +2,7 @@ import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import { React, useState } from 'react';
 import { useRouter } from 'next/router';
-
-function Titulo(props) {
-    const Tag = props.tag || 'h1';
-    return (
-        <>
-            <Tag>{props.children}</Tag>
-            <style jsx>{`
-                ${Tag} {
-                    color: ${appConfig.theme.colors.neutrals["000"]};
-                    font-size: 24px;
-                    font-weight: 600;
-                }
-            `}</style>
-        </>
-    );
-}
+import Titulo from '../components/index'
 
 export default function PaginaInicial() {
     const [username, setUsername] = useState('');
@@ -121,7 +106,7 @@ export default function PaginaInicial() {
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-                            src={errorImg ? `https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg` : `https://github.com/${username}.png`}
+                            src={errorImg ? `https://www.teahub.io/photos/full/206-2068156_spider-man-circle-logo-spiderman-logo-clipart.jpg` : `https://github.com/${username}.png`}
                             onError={() => {
                                 if(!errorImg)
                                     setErrorImg(true)
