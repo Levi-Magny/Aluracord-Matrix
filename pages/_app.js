@@ -1,3 +1,5 @@
+import Head from "next/head";
+
 function GlobalStyle() {
     return (
         <style global jsx>{`
@@ -31,6 +33,12 @@ export default function MyApp ({ Component, pageProps }) {
     return (
         <>
             <GlobalStyle />
+            <Head>
+                <title>Aranhacord</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Aranhacord" key="title" />
+                <link rel="shortcut icon" href="/favicon.png"/>
+            </Head>
             <Component {...pageProps}/>
         </>
     );
