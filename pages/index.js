@@ -1,8 +1,8 @@
+import {Titulo, Spidey} from '../components/index.js'
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import { React, useState } from 'react';
 import { useRouter } from 'next/router';
-import Titulo from '../components/index'
 
 export default function PaginaInicial() {
     const [username, setUsername] = useState('');
@@ -19,6 +19,7 @@ export default function PaginaInicial() {
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
+                <Spidey/>
                 <Box
                     styleSheet={{
                         display: 'flex',
