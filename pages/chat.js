@@ -9,13 +9,21 @@ export default function ChatPage() {
     
     // ./Sua lógica vai aqui
 
-    function handleNewMessage(mensagem) {
+    function handleDeleteMessage(id){
+        setListaDeMensagens((old) => {
+            return old.filter(item => item.id !== id);
+        });
+    }
+
+    function handleNewMessage() {
         const username = 'Levi-Magny'
         const novaMensagem = {
+            id: listaDeMensagens.length + 1,
             from: username,
-            text: mensagem
+            text: mensagemAtual
         }
         setListaDeMensagens([novaMensagem, ...listaDeMensagens]);
+        setMensagemAtual('');
     }
 
     return (
@@ -56,13 +64,17 @@ export default function ChatPage() {
                     }}
                 >
 
-                    <MessageList mensagens={listaDeMensagens} />
+                    <MessageList mensagens={listaDeMensagens} onDelete={handleDeleteMessage}/>
                     {/* <MessageList/> */}
                     <Box
                         as="form"
                         styleSheet={{
                             display: 'flex',
                             alignItems: 'center',
+                        }}
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            handleNewMessage();
                         }}
                     >
                         <TextField
@@ -75,21 +87,45 @@ export default function ChatPage() {
                             onKeyPress={(event) => {
                                 if(event.key === "Enter"){
                                     event.preventDefault();
-                                    handleNewMessage(event.target.value);
-                                    setMensagemAtual('');
+                                    handleNewMessage();
                                 }
                             }}
                             styleSheet={{
                                 width: '100%',
+                                height: '100%',
                                 border: '0',
                                 resize: 'none',
-                                borderRadius: '5px',
+                                borderRadius: '10px',
                                 padding: '6px 8px',
                                 backgroundColor: appConfig.theme.colors.neutrals[800],
-                                marginRight: '12px',
+                                marginRight: '5px',
                                 color: appConfig.theme.colors.neutrals[100],
                             }}
                         />
+                        <button
+                            type='submit'
+                        >
+                            <img src='/send.png' width='inherit'/>
+                        </button>
+                        <style jsx>{`
+                            button {
+                                width: 5%;
+                                min-width: 42px;
+                                height: 50px;
+                                background: none;
+                                border: none;
+                                border-radius: 10px;
+                                padding: 5px;
+                                transition: .5s;
+                            }
+                            button:hover {
+                                cursor: pointer;
+                                background: ${appConfig.theme.colors.neutrals[800]};
+                            }
+                            img {
+                                height: 25px;
+                            }
+                        `}</style>
                     </Box>
                 </Box>
             </Box>
@@ -163,13 +199,29 @@ function MessageList(props) {
                             <Text
                                 styleSheet={{
                                     fontSize: '10px',
-                                    marginLeft: '8px',
+                                    margin: '0 8px',
                                     color: appConfig.theme.colors.neutrals[300],
                                 }}
                                 tag="span"
                             >
                                 {(new Date().toLocaleDateString())}
                             </Text>
+                            <button
+                                onClick={() => {
+                                    return props.onDelete(mensagem.id);
+                                }}
+                            ><img src='/delete.png' width={10}/></button>
+                            <style jsx>{`
+                                button {
+                                    background: none;
+                                    border: none;
+                                    border-radius: 2px;
+                                }
+                                button:hover {
+                                    background-color: ${appConfig.theme.colors.neutrals[900]};
+                                    cursor: pointer;
+                                }
+                            `}</style>
                         </Box>
                     {mensagem.text}
                 </Text>
