@@ -100,6 +100,13 @@ export default function ChatPage() {
                 >
 
                     <MessageList mensagens={listaDeMensagens} onDelete={handleDeleteMessage} user={username}/>
+                    {listaDeMensagens.length === 0 && <img src='/peni-parker.gif' width={'50%'} style={{
+                        mixBlendMode: 'screen',
+                        position: 'relative',
+                        left: '25%',
+                        bottom: '25%'
+                    }}/>}
+
                     {/* <MessageList/> */}
                     <Box
                         as="form"
