@@ -24,6 +24,8 @@ function Spidey(){
             <style jsx>{`
                 img {
                     position: fixed;
+                    height: 30vh;
+                    width: auto;
                     top: 0;
                     left: 5%;
                     -webkit-animation: animationFrames ease-in-out 6s;
@@ -40,4 +42,10 @@ function Spidey(){
         </>
     );
 }
+
+// function Modal(){
+//     return(
+
+//     )
+// }
 export { Titulo, Spidey };
