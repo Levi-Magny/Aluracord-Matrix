@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { MessageProvider } from '../contexts/mensagecontext';
 
 function GlobalStyle() {
     return (
@@ -29,7 +30,7 @@ function GlobalStyle() {
     );
 }
 
-export default function MyApp ({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
     return (
         <>
             <GlobalStyle />
@@ -39,9 +40,11 @@ export default function MyApp ({ Component, pageProps }) {
                 <meta property="og:title" content="Aranhacord" key="title" />
                 <meta property="og:description" content="Entre em um chat para conversar sobre os infinitos universos do Teioso." />
                 <meta property="og:url" content="https://aluracord-levi.vercel.app/" />
-                <link rel="shortcut icon" href="/favicon.png"/>
+                <link rel="shortcut icon" href="/favicon.png" />
             </Head>
-            <Component {...pageProps}/>
+            <MessageProvider>
+                <Component {...pageProps} />
+            </MessageProvider>
         </>
     );
 }

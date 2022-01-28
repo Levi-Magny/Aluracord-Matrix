@@ -1,13 +1,15 @@
 import {Titulo, Spidey} from '../components/index.js'
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-import { React, useState } from 'react';
+import { React, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
+import { MessageContext } from '../contexts/mensagecontext.js';
 
 export default function PaginaInicial() {
-    const [username, setUsername] = useState('');
     const [errorImg, setErrorImg] = useState(true);
     const rotas = useRouter();
+
+    const { username, setUsername } = useContext(MessageContext);
 
     return (
         <>

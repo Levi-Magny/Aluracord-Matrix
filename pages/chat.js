@@ -1,28 +1,63 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import { React, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
+import { MessageContext } from '../contexts/mensagecontext';
+
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMyODExMiwiZXhwIjoxOTU4OTA0MTEyfQ.S7HczkXGRu1q_ourBRz6TqzmcfPLbmcEYkkd2tELH6w"
+const SUPABASE_URL = "https://zivmirrwsocgzrcsvzzs.supabase.co"
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
     // Sua lógica vai aqui
     const [mensagemAtual, setMensagemAtual] = useState('');
     const [listaDeMensagens, setListaDeMensagens] = useState([]);
+    const {username} = useContext(MessageContext);
     
+    useEffect(() => {
+        supabaseClient
+            .from('mensagens')
+            .select('*')
+            .order('id', {ascending: false})
+            .then(({ data }) => {
+                setListaDeMensagens(data);
+        });
+    }, [])
+
     // ./Sua lógica vai aqui
 
-    function handleDeleteMessage(id){
+    function handleDeleteMessage(antigoId){
+        supabaseClient
+            .from('mensagens')
+            .delete()
+            .match({ id: Number(antigoId) })
+            .then(({data, error}) => {
+                console.log(error);
+            })
         setListaDeMensagens((old) => {
-            return old.filter(item => item.id !== id);
+            return old.filter(item => item.id !== antigoId);
         });
     }
 
     function handleNewMessage() {
-        const username = 'Levi-Magny'
+        const user = username;
         const novaMensagem = {
-            id: listaDeMensagens.length + 1,
-            from: username,
-            text: mensagemAtual
+            de: user,
+            texto: mensagemAtual
         }
-        setListaDeMensagens([novaMensagem, ...listaDeMensagens]);
+        supabaseClient
+            .from('mensagens')
+            .insert([
+                // Tem que ser um objeto com os mesmos campos definidos no Banco de Dados.
+                novaMensagem
+            ])
+            .then(({data}) => {
+                setListaDeMensagens([
+                    data[0],
+                    ...listaDeMensagens
+                ]);
+            })
         setMensagemAtual('');
     }
 
@@ -64,7 +99,7 @@ export default function ChatPage() {
                     }}
                 >
 
-                    <MessageList mensagens={listaDeMensagens} onDelete={handleDeleteMessage}/>
+                    <MessageList mensagens={listaDeMensagens} onDelete={handleDeleteMessage} user={username}/>
                     {/* <MessageList/> */}
                     <Box
                         as="form"
@@ -77,6 +112,16 @@ export default function ChatPage() {
                             handleNewMessage();
                         }}
                     >
+                        <Image
+                            styleSheet={{
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                display: 'inline-block',
+                                marginRight: '8px',
+                            }}
+                            src={`https://github.com/${username}.png`}
+                        />
                         <TextField
                             placeholder="Insira sua mensagem aqui..."
                             type="textarea"
@@ -191,10 +236,10 @@ function MessageList(props) {
                                     display: 'inline-block',
                                     marginRight: '8px',
                                 }}
-                                src={`https://github.com/${mensagem.from}.png`}
+                                src={`https://github.com/${mensagem.de}.png`}
                             />
                             <Text tag="strong">
-                                {mensagem.from}
+                                {mensagem.de}
                             </Text>
                             <Text
                                 styleSheet={{
@@ -206,11 +251,11 @@ function MessageList(props) {
                             >
                                 {(new Date().toLocaleDateString())}
                             </Text>
-                            <button
+                            {((props.user).toLowerCase() == (mensagem.de).toLowerCase()) && <button
                                 onClick={() => {
                                     return props.onDelete(mensagem.id);
                                 }}
-                            ><img src='/delete.png' width={10}/></button>
+                            ><img src='/delete.png' width={10}/></button>}
                             <style jsx>{`
                                 button {
                                     background: none;
@@ -223,7 +268,7 @@ function MessageList(props) {
                                 }
                             `}</style>
                         </Box>
-                    {mensagem.text}
+                    {mensagem.texto}
                 </Text>
                 );
             })}
