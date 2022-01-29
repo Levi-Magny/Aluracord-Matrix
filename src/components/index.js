@@ -1,5 +1,5 @@
 import React from "react";
-import appConfig from '../config.json';
+import appConfig from '../../config.json';
 
 function Titulo(props) {
     const Tag = props.tag || 'h1';

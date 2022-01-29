@@ -4,10 +4,20 @@ import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
 import { MessageContext } from '../contexts/mensagecontext';
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMyODExMiwiZXhwIjoxOTU4OTA0MTEyfQ.S7HczkXGRu1q_ourBRz6TqzmcfPLbmcEYkkd2tELH6w"
 const SUPABASE_URL = "https://zivmirrwsocgzrcsvzzs.supabase.co"
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function escutaMensagemEmTempoReal(adicionaMensagem) {
+    return supabaseClient
+        .from('mensagens')
+        .on('INSERT', (respostaLive)=>{
+            adicionaMensagem(respostaLive.new)
+        })
+        .subscribe();
+}
 
 export default function ChatPage() {
     // Sua lógica vai aqui
@@ -23,6 +33,15 @@ export default function ChatPage() {
             .then(({ data }) => {
                 setListaDeMensagens(data);
         });
+
+        escutaMensagemEmTempoReal((novaMensagem)=>{
+            setListaDeMensagens((ListaAntiga)=>{
+                return[
+                    novaMensagem,
+                    ...ListaAntiga
+                ]
+            })
+        })
     }, [])
 
     // ./Sua lógica vai aqui
@@ -40,11 +59,11 @@ export default function ChatPage() {
         });
     }
 
-    function handleNewMessage() {
+    function handleNewMessage(mensagem=mensagemAtual) {
         const user = username;
         const novaMensagem = {
             de: user,
-            texto: mensagemAtual
+            texto: mensagem
         }
         supabaseClient
             .from('mensagens')
@@ -52,12 +71,12 @@ export default function ChatPage() {
                 // Tem que ser um objeto com os mesmos campos definidos no Banco de Dados.
                 novaMensagem
             ])
-            .then(({data}) => {
-                setListaDeMensagens([
-                    data[0],
-                    ...listaDeMensagens
-                ]);
-            })
+            // .then(({data}) => {
+            //     setListaDeMensagens([
+            //         data[0],
+            //         ...listaDeMensagens
+            //     ]);
+            // })
         setMensagemAtual('');
     }
 
@@ -116,6 +135,7 @@ export default function ChatPage() {
                         }}
                         onSubmit={(event) => {
                             event.preventDefault();
+                            if(mensagemAtual=='') return;
                             handleNewMessage();
                         }}
                     >
@@ -139,6 +159,7 @@ export default function ChatPage() {
                             onKeyPress={(event) => {
                                 if(event.key === "Enter"){
                                     event.preventDefault();
+                                    if(mensagemAtual=='') return;
                                     handleNewMessage();
                                 }
                             }}
@@ -154,8 +175,13 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[100],
                             }}
                         />
+                        <ButtonSendSticker onStickerClick={(link)=>{
+                            // console.log(`:sticker: ${link}`);
+                            handleNewMessage(`:sticker: ${link}`);
+                        }}/>
                         <button
                             type='submit'
+                            disabled={(mensagemAtual=='')}
                         >
                             <img src='/send.png' width='inherit'/>
                         </button>
@@ -205,6 +231,7 @@ function Header() {
 
 function MessageList(props) {
     return (
+        <>
             <Box
                 tag="ul"
                 styleSheet={{
@@ -215,6 +242,7 @@ function MessageList(props) {
                     color: appConfig.theme.colors.neutrals["000"],
                     marginBottom: '16px',
                 }}
+                className='caixa-mensagem'
             >
                 {props.mensagens.map((mensagem, index) => {
                     return(
@@ -275,10 +303,19 @@ function MessageList(props) {
                                 }
                             `}</style>
                         </Box>
-                    {mensagem.texto}
+                    {mensagem.texto.startsWith(':sticker:')
+                        ?   <Image
+                                src={mensagem.texto.replace(':sticker:', '')}
+                                styleSheet={{
+                                    height: '7em'
+                                }}
+                            />
+                        :    mensagem.texto
+                    }
                 </Text>
                 );
             })}
         </Box>
+    </>
     )
 }

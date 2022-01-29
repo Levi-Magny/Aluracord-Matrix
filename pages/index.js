@@ -1,4 +1,4 @@
-import {Titulo, Spidey} from '../components/index.js'
+import {Titulo, Spidey} from '../src/components/index.js'
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import { React, useContext, useState } from 'react';
