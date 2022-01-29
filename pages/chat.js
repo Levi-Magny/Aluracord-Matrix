@@ -14,7 +14,7 @@ function escutaMensagemEmTempoReal(adicionaMensagem) {
     return supabaseClient
         .from('mensagens')
         .on('INSERT', (respostaLive)=>{
-            handleNewMessage(respostaLive.new)
+            adicionaMensagem(respostaLive.new)
         })
         .subscribe();
 }
@@ -43,8 +43,7 @@ export default function ChatPage() {
                 ]
             });
         });
-
-        return subscription.unsubscribe();
+        return () => {subscription.unsubscribe();}
     }, [])
 
     // ./Sua lógica vai aqui
