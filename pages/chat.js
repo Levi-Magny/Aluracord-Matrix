@@ -14,7 +14,7 @@ function escutaMensagemEmTempoReal(adicionaMensagem) {
     return supabaseClient
         .from('mensagens')
         .on('INSERT', (respostaLive)=>{
-            adicionaMensagem(respostaLive.new)
+            handleNewMessage(respostaLive.new)
         })
         .subscribe();
 }
@@ -34,14 +34,17 @@ export default function ChatPage() {
                 setListaDeMensagens(data);
         });
 
-        escutaMensagemEmTempoReal((novaMensagem)=>{
+        const subscription = escutaMensagemEmTempoReal((novaMensagem)=>{
+            console.log('Nova mensagem:', novaMensagem);
             setListaDeMensagens((ListaAntiga)=>{
                 return[
                     novaMensagem,
                     ...ListaAntiga
                 ]
-            })
-        })
+            });
+        });
+
+        return subscription.unsubscribe();
     }, [])
 
     // ./Sua lógica vai aqui
@@ -71,12 +74,9 @@ export default function ChatPage() {
                 // Tem que ser um objeto com os mesmos campos definidos no Banco de Dados.
                 novaMensagem
             ])
-            // .then(({data}) => {
-            //     setListaDeMensagens([
-            //         data[0],
-            //         ...listaDeMensagens
-            //     ]);
-            // })
+            .then(({data}) => {
+                console.log('Criando mensagem: ', data);
+            })
         setMensagemAtual('');
     }
 
