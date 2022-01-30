@@ -4,6 +4,7 @@ import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
 import { MessageContext } from '../contexts/mensagecontext';
 import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
+import { ModalInfo } from '../src/components/ModalInfo';
 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMyODExMiwiZXhwIjoxOTU4OTA0MTEyfQ.S7HczkXGRu1q_ourBRz6TqzmcfPLbmcEYkkd2tELH6w"
 const SUPABASE_URL = "https://zivmirrwsocgzrcsvzzs.supabase.co"
@@ -104,6 +105,7 @@ export default function ChatPage() {
             >
                 <Header logout={()=>{
                     setUsername('');
+                    setShowModal(false);
                 }}/>
                 <Box
                     styleSheet={{
@@ -239,8 +241,11 @@ function MessageList(props) {
         const dia = (dataAtual.toLocaleDateString() === newDate.toLocaleDateString()) ? 'Hoje' : newDate.toLocaleDateString();
         return (`${dia} às ${newDate.toLocaleTimeString()}`)
     }
+    const [nomeModal, setNomeModal] = useState('');
+    const {showModal,setShowModal} = useContext(MessageContext);
     return (
         <>
+            {showModal && <ModalInfo username={nomeModal}/>}
             <Box
                 tag="ul"
                 styleSheet={{
@@ -267,64 +272,71 @@ function MessageList(props) {
                                 }
                             }}
                         >
-                        <Box
-                            styleSheet={{
-                                marginBottom: '8px',
-                            }}
-                        >
-                            <Image
+                            <Box
                                 styleSheet={{
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    display: 'inline-block',
-                                    marginRight: '8px',
+                                    marginBottom: '8px',
+                                    hover: {
+                                        cursor: 'pointer'
+                                    }
                                 }}
-                                src={`https://github.com/${mensagem.de}.png`}
-                            />
-                            <Text tag="strong">
-                                {mensagem.de}
-                            </Text>
-                            <Text
-                                styleSheet={{
-                                    fontSize: '10px',
-                                    margin: '0 8px',
-                                    color: appConfig.theme.colors.neutrals['050'],
+                                onClick={()=>{
+                                    setNomeModal(mensagem.de);
+                                    setShowModal(true);
                                 }}
-                                tag="span"
                             >
-                                {novaData(mensagem.created_at)}
-                            </Text>
-                            {((props.user).toLowerCase() == (mensagem.de).toLowerCase()) && <button
-                                onClick={() => {
-                                    return props.onDelete(mensagem.id);
-                                }}
-                            ><img src='/delete.png' width={10}/></button>}
-                            <style jsx>{`
-                                button {
-                                    background: none;
-                                    border: none;
-                                    border-radius: 2px;
-                                }
-                                button:hover {
-                                    background-color: ${appConfig.theme.colors.neutrals[900]};
-                                    cursor: pointer;
-                                }
-                            `}</style>
-                        </Box>
-                    {mensagem.texto.startsWith(':sticker:')
-                        ?   <Image
-                                src={mensagem.texto.replace(':sticker:', '')}
-                                styleSheet={{
-                                    height: '7em'
-                                }}
-                            />
-                        :    mensagem.texto
-                    }
-                </Text>
-                );
-            })}
-        </Box>
-    </>
+                                <Image
+                                    styleSheet={{
+                                        width: '20px',
+                                        height: '20px',
+                                        borderRadius: '50%',
+                                        display: 'inline-block',
+                                        marginRight: '8px',
+                                    }}
+                                    src={`https://github.com/${mensagem.de}.png`}
+                                />
+                                <Text tag="strong">
+                                    {mensagem.de}
+                                </Text>
+                                <Text
+                                    styleSheet={{
+                                        fontSize: '10px',
+                                        margin: '0 8px',
+                                        color: appConfig.theme.colors.neutrals['050'],
+                                    }}
+                                    tag="span"
+                                >
+                                    {novaData(mensagem.created_at)}
+                                </Text>
+                                {((props.user).toLowerCase() == (mensagem.de).toLowerCase()) && <button
+                                    onClick={() => {
+                                        return props.onDelete(mensagem.id);
+                                    }}
+                                ><img src='/delete.png' width={10}/></button>}
+                                <style jsx>{`
+                                    button {
+                                        background: none;
+                                        border: none;
+                                        border-radius: 2px;
+                                    }
+                                    button:hover {
+                                        background-color: ${appConfig.theme.colors.neutrals[900]};
+                                        cursor: pointer;
+                                    }
+                                `}</style>
+                            </Box>
+                            {mensagem.texto.startsWith(':sticker:')
+                                ?   <Image
+                                        src={mensagem.texto.replace(':sticker:', '')}
+                                        styleSheet={{
+                                            height: '7em'
+                                        }}
+                                    />
+                                :    mensagem.texto
+                            }
+                        </Text>
+                    );
+                })}
+            </Box>
+        </>
     )
 }
