@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { MessageProvider } from '../contexts/mensagecontext';
+import appConfig from '../config.json';
 
 function GlobalStyle() {
     return (
@@ -19,11 +20,34 @@ function GlobalStyle() {
             display: flex;
             flex: 1;
         }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+    
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: ${appConfig.theme.colors.neutrals["200"]};
+            border-radius: 2px
+        }
+     
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: ${appConfig.theme.colors.neutrals['999']}; 
+            border-radius: 2px;
+        }
+
         #__next {
             flex: 1;
         }
         #__next > * {
             flex: 1;
+        }
+        li {
+            border-top: 1px solid transparent;
+            border-image: linear-gradient( 30deg , ${appConfig.theme.colors.neutrals['200']} , ${appConfig.theme.colors.neutrals['600']});
+            border-image-slice: 1;
         }
         /* ./App fit Height */
         `}</style>

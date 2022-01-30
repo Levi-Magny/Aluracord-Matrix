@@ -2,7 +2,6 @@ import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import { React, useContext, useEffect, useState } from 'react';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
-import { useRouter } from 'next/router';
 import { MessageContext } from '../contexts/mensagecontext';
 import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
@@ -23,7 +22,7 @@ export default function ChatPage() {
     // Sua lógica vai aqui
     const [mensagemAtual, setMensagemAtual] = useState('');
     const [listaDeMensagens, setListaDeMensagens] = useState([]);
-    const {username} = useContext(MessageContext);
+    const {username, setUsername} = useContext(MessageContext);
     
     useEffect(() => {
         supabaseClient
@@ -103,7 +102,9 @@ export default function ChatPage() {
                     padding: '32px',
                 }}
             >
-                <Header />
+                <Header logout={()=>{
+                    setUsername('');
+                }}/>
                 <Box
                     styleSheet={{
                         position: 'relative',
@@ -210,7 +211,7 @@ export default function ChatPage() {
     )
 }
 
-function Header() {
+function Header(props) {
     return (
         <>
             <Box styleSheet={{ width: '100%', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
@@ -222,6 +223,8 @@ function Header() {
                     colorVariant='neutral'
                     label='Logout'
                     href="/"
+
+                    onClick={props.logout}
                 />
             </Box>
         </>
@@ -240,6 +243,7 @@ function MessageList(props) {
                     flex: 1,
                     color: appConfig.theme.colors.neutrals["000"],
                     marginBottom: '16px',
+                    borderImage: 'linear-gradient(45deg, red , yellow);'
                 }}
                 className='caixa-mensagem'
             >

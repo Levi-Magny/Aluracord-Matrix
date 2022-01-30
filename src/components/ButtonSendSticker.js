@@ -14,10 +14,11 @@ export function ButtonSendSticker(props) {
       <Button
         styleSheet={{
           borderRadius: '50%',
-          padding: '0 3px 0 0',
-          minWidth: '50px',
-          minHeight: '50px',
-          fontSize: '20px',
+          padding: '0 1px 0 0',
+          minWidth: '35px',
+          minHeight: '35px',
+          fontSize: '40px',
+          fontWeight: '400',
           marginBottom: '8px',
           lineHeight: '0',
           display: 'flex',
@@ -29,7 +30,7 @@ export function ButtonSendSticker(props) {
             filter: 'grayscale(0)',
           }
         }}
-        label="😋"
+        label="🕸️"
         onClick={() => setOpenState(!isOpen)}
       />
       {isOpen && (
