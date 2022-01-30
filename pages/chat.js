@@ -279,10 +279,6 @@ function MessageList(props) {
                                         cursor: 'pointer'
                                     }
                                 }}
-                                onClick={()=>{
-                                    setNomeModal(mensagem.de);
-                                    setShowModal(true);
-                                }}
                             >
                                 <Image
                                     styleSheet={{
@@ -292,9 +288,19 @@ function MessageList(props) {
                                         display: 'inline-block',
                                         marginRight: '8px',
                                     }}
+                                    
+                                    onClick={()=>{
+                                        setNomeModal(mensagem.de);
+                                        setShowModal(true);
+                                    }}
                                     src={`https://github.com/${mensagem.de}.png`}
                                 />
-                                <Text tag="strong">
+                                <Text tag="strong"  
+                                    onClick={()=>{
+                                        setNomeModal(mensagem.de);
+                                        setShowModal(true);
+                                    }}
+                                >
                                     {mensagem.de}
                                 </Text>
                                 <Text
