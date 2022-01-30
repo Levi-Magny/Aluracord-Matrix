@@ -187,13 +187,14 @@ export default function ChatPage() {
                         </button>
                         <style jsx>{`
                             button {
-                                width: 5%;
-                                min-width: 42px;
-                                height: 50px;
-                                background: none;
+                                min-width: 35px;
+                                height: 35px;
+                                background: ${appConfig.theme.colors.primary[900]};
                                 border: none;
-                                border-radius: 10px;
-                                padding: 5px;
+                                border-radius: 50%;
+                                margin-bottom: 8px;
+                                margin-left: 5px;
+                                padding: 5px 0 0 0;
                                 transition: .5s;
                             }
                             button:hover {
@@ -201,7 +202,7 @@ export default function ChatPage() {
                                 background: ${appConfig.theme.colors.neutrals[800]};
                             }
                             img {
-                                height: 25px;
+                                height: 18px;
                             }
                         `}</style>
                     </Box>
@@ -232,6 +233,12 @@ function Header(props) {
 }
 
 function MessageList(props) {
+    const novaData = (data) => {
+        const newDate = new Date(data);
+        const dataAtual = new Date();
+        const dia = (dataAtual.toLocaleDateString() === newDate.toLocaleDateString()) ? 'Hoje' : newDate.toLocaleDateString();
+        return (`${dia} às ${newDate.toLocaleTimeString()}`)
+    }
     return (
         <>
             <Box
@@ -243,7 +250,6 @@ function MessageList(props) {
                     flex: 1,
                     color: appConfig.theme.colors.neutrals["000"],
                     marginBottom: '16px',
-                    borderImage: 'linear-gradient(45deg, red , yellow);'
                 }}
                 className='caixa-mensagem'
             >
@@ -283,11 +289,11 @@ function MessageList(props) {
                                 styleSheet={{
                                     fontSize: '10px',
                                     margin: '0 8px',
-                                    color: appConfig.theme.colors.neutrals[300],
+                                    color: appConfig.theme.colors.neutrals['050'],
                                 }}
                                 tag="span"
                             >
-                                {(new Date().toLocaleDateString())}
+                                {novaData(mensagem.created_at)}
                             </Text>
                             {((props.user).toLowerCase() == (mensagem.de).toLowerCase()) && <button
                                 onClick={() => {
