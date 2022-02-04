@@ -1,5 +1,5 @@
 # Aluracord-Matrix
-Projeto Criado por @Levi-Magny juntamente com @omariosouto e @peas na imersão React da @alura.
+<p>Projeto Criado por <a href="https://github.com/Levi-Magny/" target="_blank">@Levi-Magny</a> juntamente com <a href="https://github.com/omariosouto/" target="_blank">@omariosouto</a> e <a href="https://github.com/peas/" target="_blank">@peas</a> na imersão React da @alura.</p>
 
 <p align="center">
 <img src="https://github.com/Levi-Magny/Aluracord-Matrix/blob/master/public/Aplicacao-Aranhacord-3.gif"/>
